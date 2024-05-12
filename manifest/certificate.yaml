@@ -33,20 +33,20 @@ spec:
   dnsNames:
   - '<path:stringreplacesecret#domain>'
   - '*.<path:stringreplacesecret#domain>'
----
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: ReferenceGrant
-metadata:
-  name: allowfromns-gateway
-  namespace: certificate
-spec:
-  from:
-  - group: gateway.networking.k8s.io
-    kind: Gateway
-    namespace: gateway
-  to:
-  - group: ""
-    kind: Secret
+# ---
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: ReferenceGrant
+# metadata:
+#   name: allowfromns-gateway
+#   namespace: certificate
+# spec:
+#   from:
+#   - group: gateway.networking.k8s.io
+#     kind: Gateway
+#     namespace: gateway
+#   to:
+#   - group: ""
+#     kind: Secret
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
