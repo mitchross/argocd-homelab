@@ -25,6 +25,9 @@ spec:
           defaultClassReplicaCount: 3
         helmPreUpgradeCheckerJob:
           enabled: false
+        serviceAccount:
+          create: true
+          name: longhorn-service-account
   syncPolicy:
     automated:
       allowEmpty: true
