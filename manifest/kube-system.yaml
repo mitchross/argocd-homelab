@@ -346,7 +346,10 @@ metadata:
   name: pool
 spec:
   cidrs:
-    - cidr: <path:stringreplacesecret#ciliumipamcidr>
+    - cidr: 192.168.100.3/30     # Covers 192.168.100.3 to 192.168.100.6
+    - cidr: 192.168.100.8/29     # Covers 192.168.100.8 to 192.168.100.15
+    - cidr: 192.168.100.16/28    # Covers 192.168.100.16 to 192.168.100.31
+    - cidr: 192.168.100.32/28    # Covers 192.168.100.32 to 192.168.100.47
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
