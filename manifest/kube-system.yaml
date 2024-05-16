@@ -15,7 +15,7 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    repoURL: https://github.com/mitchross/empty.git
+    repoURL: https://github.com/acelinkio/empty.git
     path: .
     plugin:
       name: kustomize-inline
