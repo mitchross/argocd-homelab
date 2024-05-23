@@ -74,7 +74,7 @@ homelab                        # vault used for containing secrets
 # Setup
 
 ## k3s
-This can be used with an existing Kubernetes cluster, however you may not want argocd to manage resources such as kube-system.  Either way I encourage creating your own fork or copy of this project and replacing any references to `acelinkio/argocd-homelab` with the copy/fork.
+This can be used with an existing Kubernetes cluster, however you may not want argocd to manage resources such as kube-system.  Either way I encourage creating your own fork or copy of this project and replacing any references to `mitchross/argocd-homelab` with the copy/fork.
 
 Details below show what steps are needed for creating a k3s cluster on an Ubuntu based system(s).
 <details>
@@ -113,8 +113,8 @@ EOF
 
 
 
-export SETUP_NODEIP=192.168.1.195
-export SETUP_CLUSTERTOKEN=randomtokensecret
+export SETUP_NODEIP=192.168.100.176
+export SETUP_CLUSTERTOKEN=chickennuggets
 
 # CREATE MASTER NODE
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.2+k3s1" INSTALL_K3S_EXEC="--node-ip $SETUP_NODEIP --disable=coredns,flannel,local-storage,metrics-server,servicelb,traefik --flannel-backend='none' --disable-network-policy --disable-cloud-controller --disable-kube-proxy" K3S_TOKEN=$SETUP_CLUSTERTOKEN K3S_KUBECONFIG_MODE=644 sh -s -
@@ -122,7 +122,7 @@ kubectl taint nodes rk1-01 node-role.kubernetes.io/control-plane:NoSchedule
 
 
 # INSTALL CILIUM
-export cilium_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "cilium" and .kind == "Application")' -)
+export cilium_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/mitchross/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "cilium" and .kind == "Application")' -)
 export cilium_name=$(echo "$cilium_applicationyaml" | yq eval '.metadata.name' -)
 export cilium_chart=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.chart' -)
 export cilium_repo=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.repoURL' -)
@@ -133,7 +133,7 @@ export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.he
 echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply --filename -
 
 # INSTALL COREDNS
-export coredns_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "coredns" and .kind == "Application")' -)
+export coredns_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/mitchross/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "coredns" and .kind == "Application")' -)
 export coredns_name=$(echo "$coredns_applicationyaml" | yq eval '.metadata.name' -)
 export coredns_chart=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.chart' -)
 export coredns_repo=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.repoURL' -)
@@ -175,14 +175,14 @@ kubectl create secret generic 1passwordconnect --namespace external-secrets --fr
 
 ## argocd
 ```bash
-export argocd_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.metadata.name == "argocd" and .kind == "Application")' -)
+export argocd_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/mitchross/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.metadata.name == "argocd" and .kind == "Application")' -)
 export argocd_name=$(echo "$argocd_applicationyaml" | yq eval '.metadata.name' -)
 export argocd_chart=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.chart' -)
 export argocd_repo=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.repoURL' -)
 export argocd_namespace=$(echo "$argocd_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export argocd_version=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 export argocd_values=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.helm.valuesObject' - | yq eval 'del(.configs.cm)' -)
-export argocd_config=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.kind == "AppProject" or .kind == "ApplicationSet")' -)
+export argocd_config=$(curl -sL "https://raw.githubusercontent.com/mitchross/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.kind == "AppProject" or .kind == "ApplicationSet")' -)
 
 # install
 echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_repo --version $argocd_version --namespace $argocd_namespace --values - | kubectl apply --namespace $argocd_namespace --filename -
@@ -206,5 +206,5 @@ resource "authentik_stage_identification" "default" {
 ```
 
 # Additional Comments
-* If doing find and replace, be sure to leave `https://github.com/acelinkio/empty.git`.
+* If doing find and replace, be sure to leave `https://github.com/mitchross/empty.git`.
 * Bootstrapping can be a very resource intensive process.  On a lower powered cluster, consider reducing the number of applications deployed and gradually adding them.
