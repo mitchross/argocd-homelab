@@ -1,29 +1,8 @@
+---
 kind: Namespace
 apiVersion: v1
 metadata:
   name: external-dns
-
----
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: external-dns
-  namespace: external-dns
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  refreshInterval: "5m"
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: 1password
-  target:
-    creationPolicy: Owner
-  data:
-    - secretKey: cloudflare_api_token
-      remoteRef:
-        key: external-dns
-        property: token
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -40,7 +19,6 @@ spec:
     repoURL: https://kubernetes-sigs.github.io/external-dns/
     targetRevision: 1.14.4 # Use your desired version
     helm:
-      # The chart name is now included within 'values' 
       values: |  
         external-dns:
           fullnameOverride: external-dns
@@ -55,12 +33,12 @@ spec:
             - crd
           provider: cloudflare
           cloudflare:
-            secretName: external-dns
+            secretName: cloudflare-api-key # Reference the intended Secret
           env:
             - name: CF_API_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: cloudflare-api-key 
+                  name: cloudflare-api-key
                   key: apiKey
           annotationFilter: "external-dns.custom/type in (public, private)"
   syncPolicy:
