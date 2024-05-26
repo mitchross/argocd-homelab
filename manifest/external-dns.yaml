@@ -45,8 +45,8 @@ spec:
                 - name: CF_API_TOKEN
                   valueFrom:
                     secretKeyRef:
-                      name: cloudflare-api-key
-                      key: apiKey
+                      name: external-dns
+                      key: cloudflare-api-key
 
   syncPolicy:
     automated:
