@@ -56,6 +56,12 @@ spec:
           provider: cloudflare
           cloudflare:
             secretName: external-dns
+          env:
+            - name: CF_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cloudflare-api-key 
+                  key: apiKey
           annotationFilter: "external-dns.custom/type in (public, private)"
   syncPolicy:
     automated:
