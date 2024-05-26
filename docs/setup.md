@@ -1,8 +1,15 @@
-# Preperation
+# Required Purchases
 - 1Password
 - Cloudflare managed domain
-- reserved cidr block for broadcasting
 
+# Preperation
+
+## Update manifests
+argocd-homelab aims to be as agnostic as possible, however several configurations are implementation specific.  Be sure to review the settings related to infrastructure.
+- Review `manifest/kube-system.yaml`
+- Review `manifest/longhorn-system.yaml`
+- Review `manifest/gateway.yaml`
+- Update `docs/network.md`
 
 ## 1Password
 - Create vault named `homelab`
@@ -56,11 +63,11 @@ homelab                        # vault used for containing secrets
 ### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
 - Save your domain mydomain.com into a key named `domain`. 
-- Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. 
+- Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. #will be sunsetting this soon
 - Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
 
-### Ryot Integrations
+### Ryot
 - In the homelab vault, create secret named `ryot`
 - Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
@@ -83,7 +90,16 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 # NODE
 ## packages for k3s/longhorn
 apt update
-apt install -y curl open-iscsi
+apt install -y curl open-iscsi nfs-common
+
+# workaround for multipath automounting Longhorn volumes
+## https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+cat << 'EOF' >> /etc/multipath.conf
+blacklist {
+    devnode "^sd[a-z0-9]+"
+}
+EOF
+systemctl restart multipathd.service
 
 # workaround for cilium not loading packages, dependent upon OS
 ## https://github.com/cilium/cilium/issues/25021
@@ -97,12 +113,12 @@ EOF
 
 
 
-export SETUP_NODEIP=192.168.1.77
-export SETUP_CLUSTERTOKEN=xxxxxx
+export SETUP_NODEIP=192.168.100.176
+export SETUP_CLUSTERTOKEN=chickennuggets
 
 # CREATE MASTER NODE
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.2+k3s1" INSTALL_K3S_EXEC="--node-ip $SETUP_NODEIP --disable=coredns,flannel,local-storage,metrics-server,servicelb,traefik --flannel-backend='none' --disable-network-policy --disable-cloud-controller --disable-kube-proxy" K3S_TOKEN=$SETUP_CLUSTERTOKEN K3S_KUBECONFIG_MODE=644 sh -s -
-kubectl taint nodes rpi5 node-role.kubernetes.io/control-plane:NoSchedule
+kubectl taint nodes rk1-01 node-role.kubernetes.io/control-plane:NoSchedule
 
 
 # INSTALL CILIUM
@@ -131,7 +147,7 @@ echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $core
 # JOIN NODES TO CLUSTER
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.2+k3s1" K3S_URL=https://$SETUP_NODEIP:6443 K3S_TOKEN=$SETUP_CLUSTERTOKEN sh -
 # LABEL NODES AS WORKERS
-kubectl label nodes rpi4 kubernetes.io/role=worker
+kubectl label nodes mynodename kubernetes.io/role=worker
 ```
 </details>
 
@@ -174,11 +190,11 @@ echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_
 # configure
 echo "$argocd_config" | kubectl apply --filename -
 ```
-# Post Setup
-## Authentik Add Google Auth to Stage
+## Post Setup
+### Authentik Add Google Auth to Stage
 This is a manual step until either the default authentik resource can be imported or another stage we manage can be used.
 
-Follow: https://docs.goauthentik.io/integrations/sources/general
+Follow: https://docs.goauthentik.io/docs/sources
 
 This is what the terraform code would look like.
 ```hcl
@@ -188,3 +204,7 @@ resource "authentik_stage_identification" "default" {
   sources        = [authentik_source_oauth.google.uuid]
 }
 ```
+
+# Additional Comments
+* If doing find and replace, be sure to leave `https://github.com/mitchross/empty.git`.
+* Bootstrapping can be a very resource intensive process.  On a lower powered cluster, consider reducing the number of applications deployed and gradually adding them.
