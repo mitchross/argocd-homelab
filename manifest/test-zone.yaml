@@ -29,7 +29,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: echo
+  name: echo-service
   namespace: test-zone
 spec:
   ports:
@@ -56,7 +56,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: echo
+                name: echo-service
                 port:
                   number: 80
 ---
