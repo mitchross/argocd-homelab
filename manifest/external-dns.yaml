@@ -36,26 +36,27 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    # Use the official external-dns repository instead of Bitnami
-    repoURL: https://charts.external-dns.io/
-    chart: external-dns
-    targetRevision: 1.14.4  # Adjust to the latest version
+    chart: external-dns 
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.14.4 # Use your desired version
     helm:
-      valuesObject:
-        fullnameOverride: external-dns
-        policy: sync
-        txtSuffix: .external-dns
-        txtOwnerId: kubernetes
-        crd:
-          create: true
-        sources:
-          - service
-          - ingress
-          - crd
-        provider: cloudflare
-        cloudflare:
-          secretName: external-dns
-        annotationFilter: "external-dns.custom/type in (public, private)"
+      # The chart name is now included within 'values' 
+      values: |  
+        external-dns:
+          fullnameOverride: external-dns
+          policy: sync
+          txtSuffix: ".external-dns"
+          txtOwnerId: kubernetes
+          crd:
+            create: true
+          sources:
+            - service
+            - ingress
+            - crd
+          provider: cloudflare
+          cloudflare:
+            secretName: external-dns
+          annotationFilter: "external-dns.custom/type in (public, private)"
   syncPolicy:
     automated:
       allowEmpty: true
