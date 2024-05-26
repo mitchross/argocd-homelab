@@ -22,11 +22,13 @@ spec:
       values: |-
               provider:
                 name: cloudflare
-                apiToken:
-                  secretKeyRef:
-                    name: cloudflare-api-key
-                    key: apiKey
-                    namespace: external-dns
+              env:
+                - name: CF_API_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: cloudflare-api-key
+                      key: apiKey
+
   syncPolicy:
     automated:
       allowEmpty: true
