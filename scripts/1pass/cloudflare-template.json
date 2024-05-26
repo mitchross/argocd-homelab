@@ -1,5 +1,5 @@
 {
-    "title": "Cloudflare Credentials",
+    "title": "cloudflared",
     "category": "API_CREDENTIAL",
     "sections": [
       { "id": "external-dns" },
