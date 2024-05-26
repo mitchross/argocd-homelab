@@ -94,3 +94,59 @@ spec:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
 ---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo-http-external
+  namespace: test-zone
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: echo-external.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: echo-service
+                port:
+                  number: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: echo-route
+  namespace: test-zone
+spec:
+  parentRefs:
+  - name: internal
+    namespace: gateway
+    sectionName: https
+  hostnames:
+  - "echo-external.<path:stringreplacesecret#domain>"
+  rules:
+  - backendRefs:
+    - name: echo-server
+      port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: echo-external
+  namespace: test-zone
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: echo-external.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
+---
