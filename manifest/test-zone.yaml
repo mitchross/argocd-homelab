@@ -105,7 +105,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: echo-external.<path:stringreplacesecret#domain>
+    - host: echo-external2.<path:stringreplacesecret#domain>
       http:
         paths:
           - path: /
