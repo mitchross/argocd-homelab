@@ -139,7 +139,7 @@ metadata:
   name: echo-external
   namespace: test-zone
   annotations:
-    external-dns.custom/type: private
+    external-dns.custom/type: public
 spec:
   endpoints:
     - dnsName: echo-external.<path:stringreplacesecret#domain>
