@@ -195,15 +195,15 @@ spec:
   data:
     - secretKey: domain
       remoteRef:
-        key: stringreplacesecret
+        key: stringreplacesecret-pi
         property: domain
     - secretKey: cloudflaretunnelid
       remoteRef:
-        key: stringreplacesecret
+        key: stringreplacesecret-pi
         property: cloudflaretunnelid
     - secretKey: ciliumipamcidr
       remoteRef:
-        key: stringreplacesecret
+        key: stringreplacesecret-pi
         property: ciliumipamcidr
 ---
 apiVersion: argoproj.io/v1alpha1
