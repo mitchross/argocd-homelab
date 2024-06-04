@@ -17,7 +17,7 @@ spec:
   target:
     creationPolicy: Owner
   data:
-    - secretKey: cloudflare-api-key
+    - secretKey: CF_API_TOKEN
       remoteRef:
         key: external-dns-pi
         property: token
@@ -33,9 +33,9 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    chart: external-dns 
+    chart: external-dns
     repoURL: https://kubernetes-sigs.github.io/external-dns/
-    targetRevision: 1.14.4 
+    targetRevision: 1.14.4
     helm:
       valuesObject:
         fullnameOverride: external-dns
@@ -44,15 +44,16 @@ spec:
         txtOwnerId: kubernetes
         provider:
           name: cloudflare
-          cloudflare:
-            apiTokenSecretRef:
-              name: external-dns
-              key: cloudflare-api-key
         sources:
           - service
           - ingress
           - crd
         annotationFilter: "external-dns.custom/type in (public, private)"
+        env:
+          - name: CF_API_TOKEN
+            valueFromSecret:
+              name: external-dns
+              key: CF_API_TOKEN
   syncPolicy:
     automated:
       allowEmpty: true
