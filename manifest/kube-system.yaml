@@ -99,8 +99,11 @@ spec:
         l2announcements:
           enabled: true
         loadBalancer:
-          algorithm: maglev
-          mode: dsr
+            mode: dsr
+            dsrDispatch: opt
+            acceleration: best-effort
+            l7:
+              backend: envoy
         localRedirectPolicy: true
         rollOutCiliumPods: true
         securityContext:
