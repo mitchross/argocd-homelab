@@ -54,8 +54,6 @@ spec:
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
-        bandwidthManager:
-          enabled: true
         bpf:
           masquerade: true
           hostLegacyRouting: true
