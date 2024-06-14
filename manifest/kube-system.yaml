@@ -50,7 +50,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.16.pre.2
+    targetRevision: 1.16.0-pre.2
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
@@ -62,7 +62,7 @@ spec:
           masquerade: true
           hostLegacyRouting: true
         cluster:
-          name: home-pi-cluster
+          name: home-cluster
           id: 1
         containerRuntime:
           integration: containerd
@@ -99,11 +99,11 @@ spec:
         l2announcements:
           enabled: true
         loadBalancer:
-            mode: dsr
-            dsrDispatch: opt
-            acceleration: best-effort
-            l7:
-              backend: envoy
+          mode: dsr
+          dsrDispatch: opt
+          acceleration: best-effort
+          l7:
+            backend: envoy
         localRedirectPolicy: true
         rollOutCiliumPods: true
         securityContext:
