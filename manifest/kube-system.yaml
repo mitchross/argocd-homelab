@@ -113,6 +113,8 @@ spec:
           secretsNamespace:
             create: false
             name: certificate
+        # Add the following line to skip unreachable routes
+        directNodeRoutesSkipUnreachable: true
   syncPolicy:
     automated:
       allowEmpty: true
