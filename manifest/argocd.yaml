@@ -44,6 +44,9 @@ spec:
     targetRevision: 7.1.1
     helm:
       valuesObject:
+        global:
+          image:
+            imagePullPolicy: IfNotPresent
         configs:
           params:
             server.insecure: true
