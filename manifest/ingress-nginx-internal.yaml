@@ -74,7 +74,7 @@ spec:
     - dnsName: intin.<path:stringreplacesecret#domain>
       recordType: A
       targets:
-        - 192.168.1.52
+        - 192.168.100.52
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
