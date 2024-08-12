@@ -174,7 +174,7 @@ export onepasswordconnect_json="$(op read op://homelab/1passwordconnect/1passwor
 export externalsecrets_token="$(op read op://homelab/external-secrets/token)"
 
 kubectl create namespace argocd
-kubectl create secret generic stringreplacesecret --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
+kubectl create secret generic stringreplacesecret-pi --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
 
 kubectl create namespace 1passwordconnect
 kubectl create secret generic 1passwordconnect --namespace 1passwordconnect --from-literal 1password-credentials.json="$onepasswordconnect_json"
