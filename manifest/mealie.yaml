@@ -117,11 +117,11 @@ spec:
             - name: TZ
               value: "America/Los_Angeles"
             - name: BASE_URL
-              value: "https://mealie.<path:stringreplacesecret#domain>"
+              value: "https://mealie.<path:stringreplacesecret-pi#domain>"
             - name: OIDC_AUTH_ENABLED
               value: "True"
             - name: OIDC_CONFIGURATION_URL
-              value: "https://auth.<path:stringreplacesecret#domain>/application/o/mealie/.well-known/openid-configuration"
+              value: "https://auth.<path:stringreplacesecret-pi#domain>/application/o/mealie/.well-known/openid-configuration"
             - name: OIDC_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -181,7 +181,7 @@ spec:
     namespace: gateway
     sectionName: https
   hostnames:
-  - "mealie.<path:stringreplacesecret#domain>"
+  - "mealie.<path:stringreplacesecret-pi#domain>"
   rules:
   - matches:
     - path:
@@ -200,10 +200,10 @@ metadata:
     external-dns.custom/type: public
 spec:
   endpoints:
-    - dnsName: mealie.<path:stringreplacesecret#domain>
+    - dnsName: mealie.<path:stringreplacesecret-pi#domain>
       recordType: CNAME
       targets:
-        - ingress.<path:stringreplacesecret#domain>
+        - ingress.<path:stringreplacesecret-pi#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "true"

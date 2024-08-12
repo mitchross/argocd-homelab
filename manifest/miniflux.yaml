@@ -94,7 +94,7 @@ spec:
       containers: 
         - env:
           - name: BASE_URL
-            value: https://rss.<path:stringreplacesecret#domain>
+            value: https://rss.<path:stringreplacesecret-pi#domain>
           #- name: CREATE_ADMIN
           #  value: "1"
           - name: LOG_DATE_TIME
@@ -114,11 +114,11 @@ spec:
                 key: client_secret
                 name: sso
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
-            value: https://auth.<path:stringreplacesecret#domain>/application/o/miniflux/
+            value: https://auth.<path:stringreplacesecret-pi#domain>/application/o/miniflux/
           - name: OAUTH2_PROVIDER
             value: oidc
           - name: OAUTH2_REDIRECT_URL
-            value: https://rss.<path:stringreplacesecret#domain>/oauth2/oidc/callback
+            value: https://rss.<path:stringreplacesecret-pi#domain>/oauth2/oidc/callback
           - name: OAUTH2_USER_CREATION
             value: "1"
           - name: POLLING_FREQUENCY
@@ -177,7 +177,7 @@ spec:
     namespace: gateway
     sectionName: https
   hostnames:
-  - "rss.<path:stringreplacesecret#domain>"
+  - "rss.<path:stringreplacesecret-pi#domain>"
   rules:
   - matches:
     - path:
@@ -196,10 +196,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: rss.<path:stringreplacesecret#domain>
+    - dnsName: rss.<path:stringreplacesecret-pi#domain>
       recordType: CNAME
       targets:
-        - ingress.<path:stringreplacesecret#domain>
+        - ingress.<path:stringreplacesecret-pi#domain>
       # providerSpecific:
       #   - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       #     value: "false"

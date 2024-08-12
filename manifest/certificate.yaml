@@ -14,10 +14,10 @@ metadata:
 #   issuerRef:
 #     name: letsencrypt-staging
 #     kind: ClusterIssuer
-#   commonName: '<path:stringreplacesecret#domain>'
+#   commonName: '<path:stringreplacesecret-pi#domain>'
 #   dnsNames:
-#   - '<path:stringreplacesecret#domain>'
-#   - '*.<path:stringreplacesecret#domain>'
+#   - '<path:stringreplacesecret-pi#domain>'
+#   - '*.<path:stringreplacesecret-pi#domain>'
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -29,10 +29,10 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: '<path:stringreplacesecret#domain>'
+  commonName: '<path:stringreplacesecret-pi#domain>'
   dnsNames:
-  - '<path:stringreplacesecret#domain>'
-  - '*.<path:stringreplacesecret#domain>'
+  - '<path:stringreplacesecret-pi#domain>'
+  - '*.<path:stringreplacesecret-pi#domain>'
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant

@@ -59,7 +59,7 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: intgw.<path:stringreplacesecret#domain>
+    - dnsName: intgw.<path:stringreplacesecret-pi#domain>
       recordType: A
       targets:
         - "192.168.100.50"
@@ -122,7 +122,7 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: extgw.<path:stringreplacesecret#domain>
+    - dnsName: extgw.<path:stringreplacesecret-pi#domain>
       recordType: A
       targets:
         - "192.168.100.49"

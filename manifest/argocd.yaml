@@ -50,14 +50,14 @@ spec:
           cm:
             resource.compareoptions: |
               ignoreAggregatedRoles: true
-            url: "https://argocd.<path:stringreplacesecret#domain>"
+            url: "https://argocd.<path:stringreplacesecret-pi#domain>"
             dex.config: |
               connectors:
                 - type: oidc
                   name: authentik
                   id: authentik
                   config:
-                    issuer: https://auth.<path:stringreplacesecret#domain>/application/o/argocd/
+                    issuer: https://auth.<path:stringreplacesecret-pi#domain>/application/o/argocd/
                     clientID: $sso:client_id
                     clientSecret: $sso:client_secret
                     insecureEnableGroups: true
@@ -183,7 +183,7 @@ spec:
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: stringreplacesecret
+  name: stringreplacesecret-pi
   namespace: argocd
 spec:
   refreshInterval: "5m"
@@ -195,15 +195,15 @@ spec:
   data:
     - secretKey: domain
       remoteRef:
-        key: stringreplacesecret
+        key: stringreplacesecret-pi
         property: domain
     - secretKey: cloudflaretunnelid
       remoteRef:
-        key: stringreplacesecret
+        key: stringreplacesecret-pi
         property: cloudflaretunnelid
     - secretKey: ciliumipamcidr
       remoteRef:
-        key: stringreplacesecret
+        key: stringreplacesecret-pi
         property: ciliumipamcidr
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -272,7 +272,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: argocd.<path:stringreplacesecret#domain>
+    - host: argocd.<path:stringreplacesecret-pi#domain>
       http:
         paths:
           - path: /
@@ -293,7 +293,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: argocd.<path:stringreplacesecret#domain>
+    - host: argocd.<path:stringreplacesecret-pi#domain>
       http:
         paths:
           - path: /
@@ -315,7 +315,7 @@ spec:
     namespace: gateway
     sectionName: https
   hostnames:
-  - "argocd.<path:stringreplacesecret#domain>"
+  - "argocd.<path:stringreplacesecret-pi#domain>"
   rules:
   - backendRefs:
     - name: argocd-server
@@ -332,7 +332,7 @@ spec:
 #     namespace: gateway
 #     sectionName: https
 #   hostnames:
-#   - "argocd.<path:stringreplacesecret#domain>"
+#   - "argocd.<path:stringreplacesecret-pi#domain>"
 #   rules:
 #   - backendRefs:
 #     - name: argocd-server
@@ -347,10 +347,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: argocd.<path:stringreplacesecret#domain>
+    - dnsName: argocd.<path:stringreplacesecret-pi#domain>
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret-pi#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"

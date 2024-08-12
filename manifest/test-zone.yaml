@@ -47,7 +47,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: echo.<path:stringreplacesecret#domain>
+    - host: echo.<path:stringreplacesecret-pi#domain>
       http:
         paths:
           - path: /
@@ -69,7 +69,7 @@ spec:
     namespace: gateway
     sectionName: https
   hostnames:
-  - "echo.<path:stringreplacesecret#domain>"
+  - "echo.<path:stringreplacesecret-pi#domain>"
   rules:
   - matches:
     - path:
@@ -114,10 +114,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: echo.<path:stringreplacesecret#domain>
+    - dnsName: echo.<path:stringreplacesecret-pi#domain>
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret-pi#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
@@ -165,7 +165,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: httpbin.<path:stringreplacesecret#domain>
+    - host: httpbin.<path:stringreplacesecret-pi#domain>
       http:
         paths:
           - path: /
@@ -187,7 +187,7 @@ spec:
     namespace: gateway
     sectionName: https
   hostnames:
-  - "httpbin.<path:stringreplacesecret#domain>"
+  - "httpbin.<path:stringreplacesecret-pi#domain>"
   rules:
   - backendRefs:
     - name: httpbin
@@ -202,10 +202,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: httpbin.<path:stringreplacesecret#domain>
+    - dnsName: httpbin.<path:stringreplacesecret-pi#domain>
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret-pi#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"

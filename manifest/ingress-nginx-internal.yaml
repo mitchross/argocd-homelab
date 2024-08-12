@@ -71,7 +71,7 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: intin.<path:stringreplacesecret#domain>
+    - dnsName: intin.<path:stringreplacesecret-pi#domain>
       recordType: A
       targets:
         - 192.168.100.52
